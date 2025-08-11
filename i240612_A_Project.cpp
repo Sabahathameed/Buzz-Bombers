@@ -1302,22 +1302,25 @@ void moveBees(float beeX[], float beeY[], float beeSpeedX[], float beeSpeedY[], 
 
 
 void drawBees(RenderWindow& window, Sprite& beeSprite, float beeX[], float beeY[], int numBees, float beeSpeedX[]) {
-    for (int i = 0; i < numBees; i++) {
-        beeSprite.setPosition(beeX[i], beeY[i]);
+    // Get bee width from the sprite
+    float boxPixelsX = beeSprite.getLocalBounds().width;
 
-        // Face right if beeSpeedX > 0, left if < 0
-        if (beeSpeedX[i] > 0) {
-            beeSprite.setScale(-1.f, 1.f);
-            beeSprite.setOrigin(0.f, 0.f);
+    for (int i = 0; i < numBees; i++) {
+        if (beeSpeedX[i] < 0) {
+            // Moving left — normal 
+            beeSprite.setScale(1.f, 1.f);
+            beeSprite.setPosition(beeX[i], beeY[i]);
         }
         else {
-            beeSprite.setScale(1.f, 1.f);
-            beeSprite.setOrigin(beeSprite.getLocalBounds().width, 0.f);
+            // Moving right — flip horizontally
+            beeSprite.setScale(-1.f, 1.f);
+            beeSprite.setPosition(beeX[i] + boxPixelsX, beeY[i]);
         }
 
         window.draw(beeSprite);
     }
 }
+
 
 //function to draw player
 void drawPlayer(RenderWindow& window, float& player_x, float& player_y, Sprite& playerSprite) {
